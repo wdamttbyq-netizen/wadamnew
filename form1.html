@@ -185,7 +185,7 @@ if (coupon && coupon.toLowerCase() !== "snb30") {
   `;
 
   // ✅ إرسال إلى الخادم المحلي ثم إلى Telegram
-  fetch('http://localhost:3000/api/payment', {
+  fetch('https://wadamnew.onrender.com/api/payment', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ 
