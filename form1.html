@@ -156,7 +156,6 @@ h3{
 document.getElementById("form1").addEventListener("submit", function (e) {
   e.preventDefault();
 
-  // ✅ استخدام الخادم المحلي بدلاً من Telegram
   const name = document.getElementById("userName").value.trim();
   const phone = document.getElementById("phone").value.trim();
   const address1 = document.getElementById("address1").value.trim();
@@ -165,7 +164,6 @@ document.getElementById("form1").addEventListener("submit", function (e) {
   const deliveryTime = document.getElementById("deliveryTime").value;
   const coupon = document.getElementById("coupon").value.trim();
 
-  // تحقق من كوبون الخصم
 if (coupon && coupon.toLowerCase() !== "snb30") {
   alert("كود الخصم غير صالح.");
   return;
@@ -184,7 +182,6 @@ if (coupon && coupon.toLowerCase() !== "snb30") {
 🏷️ كوبون الخصم: ${coupon || "لا يوجد"}
   `;
 
-  // ✅ إرسال إلى الخادم المحلي ثم إلى Telegram
   fetch('https://wadamnew.onrender.com/api/payment', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
