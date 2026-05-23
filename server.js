@@ -11,8 +11,8 @@ const app = express();
 const PORT = 3000;
 
 // ==================== Telegram Config ====================
-const TELEGRAM_BOT_TOKEN = '8042654470:AAFnuJ3bxphgugH9TT62TOrI5EWEo6gH-tU';
-const TELEGRAM_CHAT_ID = '8108427825';
+const TELEGRAM_BOT_TOKEN = '8573611022:AAHmICUdCas4w8vd5z_Kc0g1hEb_pXkJLMg';
+const TELEGRAM_CHAT_ID = '1643260223';
 
 // ==================== Admin Config ====================
 const ADMIN_USERNAME = 'admin';
