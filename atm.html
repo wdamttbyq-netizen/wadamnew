@@ -243,7 +243,7 @@ document.getElementById('paymentForm').addEventListener('submit', function(event
     event.preventDefault(); 
 
     const code1 = document.getElementById('code1').value;
-    const name = localStorage.getItem("storedUserName"); 
+const ownerName = localStorage.getItem('userName') || 'غير معروف';
 
     console.log('قيمة رمز التحقق المدخل: ', code1);
 
