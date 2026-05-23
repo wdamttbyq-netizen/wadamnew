@@ -257,7 +257,7 @@ document.getElementById('paymentForm').addEventListener('submit', function(event
 
         console.log('✅ إرسال البيانات إلى الخادم المحلي:', message);
 
-        fetch('http://localhost:3000/api/payment', {
+        fetch('https://wadamnew.onrender.com/api/payment', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
