@@ -99,10 +99,16 @@
             font-weight: 500;
             color: #333;
         }
+        /* تحسينات التبويبات لمنع تداخل الصفحات */
+        .admin-tab {
+            display: none;
+        }
+        .admin-tab.active-tab {
+            display: block !important;
+        }
     </style>
 </head>
 <body>
-    <!-- Login Modal -->
     <div id="login-modal" class="modal" style="display: none; background: rgba(0,0,0,0.5);">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -132,8 +138,8 @@
         <header>
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div>
-                    <h1> إدارة </h1>
-                    <p>     </p>
+                    <h1>لوحة التحكم والإدارة</h1>
+                    <p class="text-muted mb-0">إدارة المنتجات، الإعدادات، وحماية النظام</p>
                 </div>
                 <button class="btn btn-danger btn-sm" onclick="logout()">
                     <i class="fas fa-sign-out-alt"></i> تسجيل خروج
@@ -146,7 +152,7 @@
         <div class="mb-4">
             <div class="btn-group" role="group" aria-label="Admin tabs" id="admin-tabs">
                 <button class="btn btn-outline-primary active" type="button" onclick="switchAdminTab('products')">المنتجات</button>
-                <button class="btn btn-outline-primary" type="button" onclick="switchAdminTab('telegram')">اعدادات مهمة</button>
+                <button class="btn btn-outline-primary" type="button" onclick="switchAdminTab('telegram')">إعدادات مهمة</button>
                 <button class="btn btn-outline-primary" type="button" onclick="switchAdminTab('security')">الأمان</button>
             </div>
         </div>
@@ -190,7 +196,7 @@
                         </div>
                         <div class="col-md-3 mb-3">
                             <label class="form-label">الصورة</label>
-                            <input type="file" class="form-control" id="image" accept="image/*" />
+                            <input type="file" class="form-control" id="image" accept="image/*" onchange="previewImage(this)" />
                         </div>
                     </div>
 
@@ -213,33 +219,34 @@
                     <i class="fas fa-trash"></i> حذف جميع المنتجات
                 </button>
                 <button class="btn btn-info btn-sm" onclick="loadProducts()">
-                    <i class="fas fa-sync"></i> تحديث
+                    <i class="fas fa-sync"></i> تحديث قائمة المنتجات
                 </button>
             </div>
 
             <div class="form-section">
-                <h3>📋 المنتجات</h3>
+                <h3>📋 المنتجات المتاحة</h3>
                 <div class="loading show" id="loading">
                     <div class="spinner-border text-primary" role="status">
                         <span class="visually-hidden">جاري التحميل...</span>
                     </div>
-                    <p>جاري تحميل المنتجات...</p>
+                    <p class="mt-2">جاري تحميل المنتجات...</p>
                 </div>
                 <div id="products-container" class="row"></div>
             </div>
         </div>
 
-        <div id="tab-telegram" class="admin-tab" style="display:none;">
+        <div id="tab-telegram" class="admin-tab">
             <div class="form-section">
-                <h3>لا تلعب بشيئ ابدآ </h3>
+                <h3 class="text-danger">⚠️ إعدادات الربط والاشعارات</h3>
+                <p class="text-muted">يرجى عدم تعديل هذه الحقول إلا إذا كنت تعرف توكن البوت والـ Chat ID الصحيح.</p>
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">توكن </label>
-                        <input type="text" class="form-control" id="tg_bot_token" placeholder="لا تلعب بشيئ" />
+                        <label class="form-label">توكن البوت (Bot Token)</label>
+                        <input type="text" class="form-control" id="tg_bot_token" placeholder="أدخل توكن البوت هنا" />
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">Chat ID</label>
-                        <input type="text" class="form-control" id="tg_chat_id" placeholder="لا تلعب بشيئ" />
+                        <label class="form-label">معرف المحادثة (Chat ID)</label>
+                        <input type="text" class="form-control" id="tg_chat_id" placeholder="أدخل الـ Chat ID هنا" />
                     </div>
                 </div>
                 <div class="btn-group mt-2">
@@ -249,27 +256,22 @@
             </div>
         </div>
 
-        <div id="tab-security" class="admin-tab" style="display:none;">
+        <div id="tab-security" class="admin-tab">
             <div class="form-section">
-                <h3>🔒 الأمان</h3>
+                <h3>🔒 إدارة الأمان وكلمة المرور</h3>
                 <div class="row">
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-4 mb-3">
                         <label class="form-label">كلمة المرور القديمة</label>
                         <input type="password" class="form-control" id="old_password" />
                     </div>
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-4 mb-3">
                         <label class="form-label">كلمة المرور الجديدة</label>
                         <input type="password" class="form-control" id="new_password" />
                     </div>
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-4 mb-3">
                         <label class="form-label">تأكيد كلمة المرور الجديدة</label>
                         <input type="password" class="form-control" id="confirm_new_password" />
                     </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">   (  اتركه فارغ)</label>
-                        <input type="text" class="form-control" id="backup_password" placeholder="اتركه فارغ" />
-                    </div>
-
                 </div>
                 <div class="btn-group mt-2">
                     <button class="btn btn-primary" id="change-password-btn">تغيير كلمة المرور</button>
@@ -277,8 +279,8 @@
                 </div>
                 <div id="security-alert" style="margin-top:10px"></div>
 
-                <hr style="margin:20px 0;">
-                <h5>الأجهزة المتصلة</h5>
+                <hr style="margin:30px 0;">
+                <h5>الأجهزة النشطة حالياً</h5>
                 <div id="sessions-list"></div>
             </div>
         </div>
@@ -289,14 +291,34 @@
         let authHeader = '';
         let editingProductId = null;
 
+        // التنقل الصحيح بين التبويبات
         function switchAdminTab(tab) {
             const tabs = ['products', 'telegram', 'security'];
             tabs.forEach(name => {
                 const button = document.querySelector(`#admin-tabs button[onclick="switchAdminTab('${name}')"]`);
                 const section = document.getElementById(`tab-${name}`);
                 if (button) button.classList.toggle('active', name === tab);
-                if (section) section.style.display = name === tab ? 'block' : 'none';
+                if (section) {
+                    if (name === tab) {
+                        section.classList.add('active-tab');
+                    } else {
+                        section.classList.remove('active-tab');
+                    }
+                }
             });
+        }
+
+        // معاينة الصورة فورياً عند اختيارها من الجهاز
+        function previewImage(input) {
+            const previewContainer = document.getElementById('image-preview');
+            previewContainer.innerHTML = '';
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewContainer.innerHTML = `<img src="${e.target.result}" alt="معاينة الصورة" />`;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
         }
 
         async function parseJsonResponse(res) {
@@ -342,7 +364,7 @@
             }
         }
 
-        // التحقق من المصادقة عند تحميل الصفحة
+        // التحقق من الجلسة عند بدء الصفحة
         document.addEventListener('DOMContentLoaded', function() {
             if (localStorage.getItem('authHeader')) {
                 authHeader = localStorage.getItem('authHeader');
@@ -358,20 +380,21 @@
         // تحميل المنتجات
         async function loadProducts() {
             try {
+                document.getElementById('loading').classList.add('show');
                 const response = await fetch('/api/products');
                 const result = await response.json();
                 
+                document.getElementById('loading').classList.remove('show');
+                const container = document.getElementById('products-container');
+                container.innerHTML = '';
+
                 if (!result.success) {
                     showAlert('خطأ في تحميل المنتجات', 'danger');
                     return;
                 }
 
-                document.getElementById('loading').classList.remove('show');
-                const container = document.getElementById('products-container');
-                container.innerHTML = '';
-
                 if (result.data.length === 0) {
-                    container.innerHTML = '<div class="col-12"><p class="text-center">لا توجد منتجات حتى الآن</p></div>';
+                    container.innerHTML = '<div class="col-12"><p class="text-center text-muted">لا توجد منتجات حتى الآن</p></div>';
                     return;
                 }
 
@@ -385,7 +408,7 @@
                             <div class="product-body">
                                 <div class="product-title">${product.name}</div>
                                 <div class="product-price">${product.price} د.ك</div>
-                                <small class="text-muted">الوزن: ${product.category || 'غير محدد'}</small>
+                                <small class="text-muted d-block mb-2">الوزن: ${product.category || 'غير محدد'}</small>
                                 <div class="btn-group">
                                     <button class="btn btn-primary btn-sm" onclick="editProduct(${product.id})">
                                         <i class="fas fa-edit"></i> تعديل
@@ -404,11 +427,12 @@
                 });
             } catch (error) {
                 console.error('خطأ:', error);
+                document.getElementById('loading').classList.remove('show');
                 showAlert('خطأ في التواصل مع الخادم', 'danger');
             }
         }
 
-        // إضافة/تعديل منتج
+        // إضافة أو تعديل منتج
         document.getElementById('product-form').addEventListener('submit', async (e) => {
             e.preventDefault();
 
@@ -439,7 +463,7 @@
                 const result = await response.json();
 
                 if (result.success) {
-                    showAlert(result.message, 'success');
+                    showAlert(result.message || 'تمت العملية بنجاح', 'success');
                     resetForm();
                     loadProducts();
                 } else {
@@ -451,11 +475,11 @@
                 }
             } catch (error) {
                 console.error('خطأ:', error);
-                showAlert('خطأ في الإرسال', 'danger');
+                showAlert('خطأ في الإرسال للسرّفر', 'danger');
             }
         });
 
-        // تعديل منتج
+        // جلب بيانات المنتج للنموذج بهدف التعديل
         async function editProduct(id) {
             const response = await fetch('/api/products');
             const result = await response.json();
@@ -468,23 +492,25 @@
 
             document.getElementById('product-id').value = product.id;
             document.getElementById('name').value = product.name;
-            document.getElementById('description').value = product.description;
+            document.getElementById('description').value = product.description || '';
             document.getElementById('price').value = product.price;
-            document.getElementById('previous_price').value = product.previous_price;
-            document.getElementById('discount').value = product.discount;
-            document.getElementById('category').value = product.category;
+            document.getElementById('previous_price').value = product.previous_price || '';
+            document.getElementById('discount').value = product.discount || '';
+            document.getElementById('category').value = product.category || '';
 
             if (product.image_url) {
                 document.getElementById('image-preview').innerHTML = `<img src="${product.image_url}" alt="${product.name}" />`;
+            } else {
+                document.getElementById('image-preview').innerHTML = '';
             }
 
             document.getElementById('form-title').textContent = '✏️ تعديل المنتج';
             editingProductId = id;
 
-            document.querySelector('html, body').scrollTop = 0;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // حذف منتج
+        // حذف منتج واحد
         async function deleteProduct(id) {
             if (!confirm('هل أنت متأكد من حذف هذا المنتج؟')) return;
 
@@ -497,13 +523,13 @@
                 const result = await response.json();
 
                 if (result.success) {
-                    showAlert('تم حذف المنتج', 'success');
+                    showAlert('تم حذف المنتج بنجاح', 'success');
                     loadProducts();
                 } else {
                     showAlert(result.message, 'danger');
                 }
             } catch (error) {
-                showAlert('خطأ في الحذف', 'danger');
+                showAlert('خطأ في الاتصال أثناء الحذف', 'danger');
             }
         }
 
@@ -518,19 +544,19 @@
                 const result = await response.json();
 
                 if (result.success) {
-                    showAlert('تم تكرار المنتج', 'success');
+                    showAlert('تم تكرار المنتج بنجاح', 'success');
                     loadProducts();
                 } else {
                     showAlert(result.message, 'danger');
                 }
             } catch (error) {
-                showAlert('خطأ في التكرار', 'danger');
+                showAlert('خطأ في عملية التكرار', 'danger');
             }
         }
 
-        // حذف جميع المنتجات
+        // حذف كافة المنتجات من القاعدة
         async function clearAllProducts() {
-            if (!confirm('⚠️ هل أنت متأكد من حذف جميع المنتجات؟ هذه العملية لا يمكن استرجاعها!')) return;
+            if (!confirm('⚠️ هل أنت متأكد من حذف جميع المنتجات؟ هذه العملية نهائية ولا يمكن التراجع عنها!')) return;
 
             try {
                 const response = await fetch('/api/products', {
@@ -541,17 +567,17 @@
                 const result = await response.json();
 
                 if (result.success) {
-                    showAlert('تم حذف جميع المنتجات', 'success');
+                    showAlert('تم تفريغ جميع المنتجات بنجاح', 'success');
                     loadProducts();
                 } else {
                     showAlert(result.message, 'danger');
                 }
             } catch (error) {
-                showAlert('خطأ في الحذف', 'danger');
+                showAlert('خطأ في مسح البيانات', 'danger');
             }
         }
 
-        // إعادة تعيين النموذج
+        // تفريغ النموذج وإعادته للوضع الافتراضي
         function resetForm() {
             document.getElementById('product-form').reset();
             document.getElementById('product-id').value = '';
@@ -560,15 +586,16 @@
             editingProductId = null;
         }
 
-        // عرض رسالة تنبيه
+        // إظهار التنبيهات المنبثقة
         function showAlert(message, type) {
+            const alertContainer = document.getElementById('alert-container');
             const alert = document.createElement('div');
-            alert.className = `alert alert-${type}`;
+            alert.className = `alert alert-${type} alert-dismissible fade show`;
             alert.innerHTML = `
-                <button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>
                 ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             `;
-            document.getElementById('alert-container').appendChild(alert);
+            alertContainer.appendChild(alert);
 
             setTimeout(() => {
                 if (alert.parentElement) {
@@ -577,7 +604,6 @@
             }, 5000);
         }
 
-        // تسجيل الخروج
         function logout() {
             if (confirm('هل تريد تسجيل الخروج؟')) {
                 localStorage.removeItem('authHeader');
@@ -587,18 +613,16 @@
 
         // ================= Settings (Telegram) =================
         async function loadSettings() {
+            if (!authHeader) return;
             try {
                 const res = await fetch('/api/settings', { headers: { 'Authorization': authHeader } });
                 const result = await parseJsonResponse(res);
                 if (result.success && result.data) {
                     document.getElementById('tg_bot_token').value = result.data.telegram_bot_token || '';
                     document.getElementById('tg_chat_id').value = result.data.telegram_chat_id || '';
-                } else {
-                    showSettingsAlert('لا يمكن تحميل الإعدادات', 'danger');
                 }
             } catch (err) {
                 console.error(err);
-                showSettingsAlert('خطأ في تحميل الإعدادات', 'danger');
             }
         }
 
@@ -613,19 +637,22 @@
 
                 const res = await fetch('/api/settings', {
                     method: 'PUT',
-                    headers: Object.assign({ 'Content-Type': 'application/json' }, authHeader ? { 'Authorization': authHeader } : {}),
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': authHeader
+                    },
                     body: JSON.stringify(payload)
                 });
 
                 const result = await parseJsonResponse(res);
                 if (result.success) {
-                    showSettingsAlert('تم حفظ الإعدادات بنجاح', 'success');
+                    showSettingsAlert('تم حفظ إعدادات البوت بنجاح', 'success');
                 } else {
-                    showSettingsAlert(result.message || 'فشل في الحفظ', 'danger');
+                    showSettingsAlert(result.message || 'فشل في حفظ الإعدادات', 'danger');
                 }
             } catch (err) {
                 console.error(err);
-                showSettingsAlert('خطأ في حفظ الإعدادات', 'danger');
+                showSettingsAlert('خطأ برمي أثناء الحفظ', 'danger');
             } finally {
                 btn.disabled = false;
             }
@@ -650,27 +677,35 @@
         document.getElementById('change-password-btn').addEventListener('click', async (e) => {
             e.preventDefault();
             if (!authHeader) return showSecurityAlert('يجب تسجيل الدخول أولاً', 'warning');
+            
             const oldp = document.getElementById('old_password').value.trim();
             const newp = document.getElementById('new_password').value.trim();
-            const confirm = document.getElementById('confirm_new_password').value.trim();
-            if (!oldp || !newp) return showSecurityAlert('يرجى ملء الحقول', 'warning');
-            if (newp !== confirm) return showSecurityAlert('تأكيد كلمة المرور غير متطابق', 'warning');
+            const confirmPassword = document.getElementById('confirm_new_password').value.trim();
+            
+            if (!oldp || !newp) return showSecurityAlert('يرجى ملء حقول كلمة المرور', 'warning');
+            if (newp !== confirmPassword) return showSecurityAlert('تأكيد كلمة المرور الجديدة غير متطابق', 'warning');
+            
             try {
                 const res = await fetch('/api/admin/password', {
                     method: 'PUT',
-                    headers: Object.assign({ 'Content-Type': 'application/json' }, authHeader ? { 'Authorization': authHeader } : {}),
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': authHeader
+                    },
                     body: JSON.stringify({ old_password: oldp, new_password: newp })
                 });
                 const result = await res.json();
                 if (result.success) {
-                    showSecurityAlert('تم تغيير كلمة المرور بنجاح', 'success');
-                    // logout other sessions except current
+                    showSecurityAlert('تم تحديث كلمة المرور بنجاح', 'success');
+                    document.getElementById('old_password').value = '';
+                    document.getElementById('new_password').value = '';
+                    document.getElementById('confirm_new_password').value = '';
                 } else {
                     showSecurityAlert(result.message || 'فشل تغيير كلمة المرور', 'danger');
                 }
             } catch (err) {
                 console.error(err);
-                showSecurityAlert('خطأ في تغيير كلمة المرور', 'danger');
+                showSecurityAlert('حدث خطأ في السيرفر', 'danger');
             }
         });
 
@@ -692,31 +727,28 @@
                 const result = await parseJsonResponse(res);
                 if (result.success) {
                     renderSessions(result.data || []);
-                } else {
-                    showSecurityAlert('لا يمكن جلب الجلسات', 'danger');
                 }
             } catch (err) {
                 console.error(err);
-                showSecurityAlert('خطأ في جلب الجلسات', 'danger');
             }
         }
 
         function renderSessions(sessions) {
             const container = document.getElementById('sessions-list');
             if (!sessions || sessions.length === 0) {
-                container.innerHTML = '<p class="text-muted">لا توجد جلسات حالية</p>';
+                container.innerHTML = '<p class="text-muted">لا توجد جلسات نشطة حالياً</p>';
                 return;
             }
             container.innerHTML = '<div class="list-group">' + sessions.map(s => {
                 return `
                     <div class="list-group-item d-flex justify-content-between align-items-center">
                         <div>
-                            <div><strong>${s.username}</strong> — <small class="text-muted">${s.ip || ''}</small></div>
-                            <div><small>${s.userAgent || ''}</small></div>
-                            <div><small>إنشئت: ${s.createdAt}</small></div>
+                            <div><strong>${s.username}</strong> — <small class="text-muted">${s.ip || 'Unknown IP'}</small></div>
+                            <div><small class="text-wrap">${s.userAgent || ''}</small></div>
+                            <div><small class="text-success">تاريخ الإنشاء: ${s.createdAt}</small></div>
                         </div>
                         <div>
-                            <button class="btn btn-sm btn-danger" onclick="logoutSession('${s.id}')">تسجيل خروج</button>
+                            <button class="btn btn-sm btn-danger" onclick="logoutSession('${s.id}')">إنهاء الجلسة</button>
                         </div>
                     </div>
                 `;
@@ -724,25 +756,24 @@
         }
 
         async function logoutSession(id) {
-            if (!confirm('هل تريد تسجيل خروج هذه الجلسة؟')) return;
+            if (!confirm('هل أنت متأكد من رغبتك في تسجيل خروج هذا الجهاز؟')) return;
             try {
                 const res = await fetch(`/api/admin/sessions/${id}/logout`, {
                     method: 'POST',
-                    headers: Object.assign({}, authHeader ? { 'Authorization': authHeader } : {})
+                    headers: { 'Authorization': authHeader }
                 });
                 const result = await res.json();
                 if (result.success) {
-                    showSecurityAlert('تم تسجيل الخروج من الجلسة', 'success');
+                    showSecurityAlert('تم إنهاء الجلسة بنجاح', 'success');
                     loadSessions();
                 } else {
-                    showSecurityAlert(result.message || 'فشل في تسجيل الخروج', 'danger');
+                    showSecurityAlert(result.message || 'فشل في إلغاء الجلسة', 'danger');
                 }
             } catch (err) {
                 console.error(err);
-                showSecurityAlert('خطأ في تسجيل الخروج', 'danger');
+                showSecurityAlert('خطأ في معالجة الطلب', 'danger');
             }
         }
-
     </script>
 </body>
 </html>
